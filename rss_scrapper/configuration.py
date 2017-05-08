@@ -18,8 +18,7 @@ def load_yaml_file(yaml_file):
     except YAMLError as e:
         logger.error("Error while parsing the configuration file: %s %s"
                      % (type(e).__name__, e))
-
-    return None
+        raise e
 
 
 def validate_task_name(task_name):
@@ -36,15 +35,24 @@ def validate_task_name(task_name):
 
 class ConfigurationError(Exception):
     none = None
+    task_path = ""
 
-    def __init__(self, message, node=None):
+    def __init__(self, message, node=None, task_path=None):
         super(ConfigurationError, self).__init__(message)
 
         self.node = node
+        if task_path is not None:
+            self.task_path = task_path
 
     def __str__(self):
+        message = ""
+
+        if self.task_path is not "":
+            message += "[task: " + self.task_path + "] "
+
+        message += super(ConfigurationError, self).__str__()
+
         if self.node is not None:
-            return "%s - invalid configuration: \n%s" % (
-                super(ConfigurationError, self).__str__(), self.node)
-        else:
-            return super(ConfigurationError, self).__str__()
+            message += "- invalid configuration: \n%s" % self.node
+
+        return message

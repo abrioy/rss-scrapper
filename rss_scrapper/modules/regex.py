@@ -11,9 +11,7 @@ class RegexTask(Task):
     pattern = None
     replace = None
 
-    def __init__(self, args):
-        Task.__init__(self, args)
-
+    def init(self, args):
         pattern_text = Task.get_parameter(args, "pattern", str)
         flags = Task.get_parameter(args, "flags", int, optional=True)
         if flags is None:

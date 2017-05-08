@@ -11,9 +11,7 @@ logger = logging.getLogger(__name__)
 class GetTask(Task):
     url = None
 
-    def __init__(self, args):
-        Task.__init__(self, args)
-
+    def init(self, args):
         self.url = Task.get_parameter(args, "url", str)
         # TODO: Add auth to parameters
 

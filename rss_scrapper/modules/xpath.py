@@ -12,9 +12,7 @@ logger = logging.getLogger(__name__)
 class XPathTask(Task):
     expression = None
 
-    def __init__(self, args):
-        Task.__init__(self, args)
-
+    def init(self, args):
         self.expression = Task.get_parameter(args, param_type=str)
 
     def do_execute(self, data):

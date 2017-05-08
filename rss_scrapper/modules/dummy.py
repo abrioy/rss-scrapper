@@ -6,11 +6,10 @@ from rss_scrapper.modules.task import Task
 logger = logging.getLogger(__name__)
 
 
-class TextTask(Task):
-    text = None
+class DummyTask(Task):
 
     def init(self, args):
-        self.text = Task.get_parameter(args, param_type=str)
+        pass
 
     def do_execute(self, data):
-        yield self.text
+        yield data

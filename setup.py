@@ -13,7 +13,8 @@ requirements = [
     'PyYAML>=3.11',
     'requests>=2.13.0',
     'lxml>=3.7.3',
-    'cssselect>=1.0.1'
+    'cssselect>=1.0.1',
+    'feedgen>=0.5.1',
 ]
 
 test_requirements = [

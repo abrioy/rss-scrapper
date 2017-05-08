@@ -9,8 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class SelectorTask(XPathTask):
-    def __init__(self, args):
-        Task.__init__(self, args)
 
+    def init(self, args):
         selector_text = Task.get_parameter(args, param_type=str)
         self.expression = GenericTranslator().css_to_xpath(selector_text)
