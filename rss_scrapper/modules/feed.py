@@ -19,7 +19,17 @@ class FeedTask(Task):
 
         self.tasks = rss_scrapper.task_factory.create_tasks(args)
 
-    def execute(self, data):
-        Task.execute(self, data)
+    def do_execute(self, data):
+        return execute_sub_tasks(self.tasks, 0, data)
 
-        return Task.execute_subtasks(self.tasks, data)
+
+def execute_sub_tasks(tasks, index, data):
+    if index >= len(tasks):
+        yield data
+        return
+
+    task = tasks[index]
+    res = task.execute(data)
+
+    for d in res:
+        yield from execute_sub_tasks(tasks, index+1, d)

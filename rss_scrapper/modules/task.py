@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
 
+from configuration import ConfigurationError
+
 logger = logging.getLogger(__name__)
 
 
@@ -25,21 +27,42 @@ class Task:
         :param data:
         :return:
         """
-        logger.debug("Executing task: %s" % self)
+        logger.debug("%s\n%s" % (type(data), data))
+        logger.debug("Start task: %s" % self)
+        res = self.do_execute(data)
+        logger.debug("Stop task: %s" % self)
+        return res
+
+    def do_execute(self, data):
+        """
+        This function is intended to be extended by subclasses
+        :param data:
+        :return:
+        """
+        raise NotImplementedError
 
     def __str__(self):
         return self.__class__.__name__
 
     @staticmethod
-    def execute_subtasks(tasks, data):
-        for task in tasks:
-            if data is None:
-                # First task
-                data = task.execute(data)
-            else:
-                new_data = []
-                for d in data:
-                    new_data.append(task.execute(d))
-                data = new_data
+    def get_parameter(conf, param_name=None, param_type=None, optional=False):
+        if param_name is None:
+            param = conf
+        else:
+            if param_name not in conf:
+                if optional:
+                    return None
+                else:
+                    raise ConfigurationError("the task lacks a mandatory"
+                                             " parameter: %s" % param_name,
+                                             conf)
+            param = conf[param_name]
 
-        return data
+        # Type check
+        if param_type is not None and not isinstance(param, param_type):
+            raise ConfigurationError("the %s parameter does not have the"
+                                     " correct type, expected %s and got %s"
+                                     % (param_name, param_type,
+                                        type(param)),
+                                     conf)
+        return param

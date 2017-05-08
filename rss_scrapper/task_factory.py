@@ -4,12 +4,16 @@ import logging
 from rss_scrapper.configuration import ConfigurationError, validate_task_name
 import rss_scrapper.modules.feed
 import rss_scrapper.modules.get
+import rss_scrapper.modules.selector
+import rss_scrapper.modules.regex
 
 logger = logging.getLogger(__name__)
 
 TASKS_MAP = {
     "feed": rss_scrapper.modules.feed.FeedTask,
-    "get": rss_scrapper.modules.get.GetTask
+    "get": rss_scrapper.modules.get.GetTask,
+    "selector": rss_scrapper.modules.selector.SelectorTask,
+    "regex": rss_scrapper.modules.regex.RegexTask,
 }
 
 
@@ -64,8 +68,11 @@ def execute_configuration(conf, dry_run=False):
 
         feed_task = create_task("feed", tasks_conf)
         if not dry_run:
-            res = feed_task.execute(None)
-            if res is None or len(res) == 0:
+            task_res = feed_task.execute(None)
+
+            res = list(task_res)
+
+            if len(res) == 0:
                 logger.info("The feed %s has not returned any data,"
                             " nothing has been generated" % feed_name)
             else:
