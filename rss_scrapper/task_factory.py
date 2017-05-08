@@ -3,6 +3,7 @@ import logging
 
 from rss_scrapper.configuration import ConfigurationError, validate_task_name
 import rss_scrapper.modules.feed
+import rss_scrapper.modules.text
 import rss_scrapper.modules.get
 import rss_scrapper.modules.selector
 import rss_scrapper.modules.regex
@@ -11,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 TASKS_MAP = {
     "feed": rss_scrapper.modules.feed.FeedTask,
+    "text": rss_scrapper.modules.text.TextTask,
     "get": rss_scrapper.modules.get.GetTask,
     "selector": rss_scrapper.modules.selector.SelectorTask,
     "regex": rss_scrapper.modules.regex.RegexTask,
