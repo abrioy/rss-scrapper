@@ -11,8 +11,8 @@ with open('HISTORY.rst') as history_file:
 
 requirements = [
     'PyYAML>=3.11',
-    'requests>=2.13.0'
-    'lxml>=3.7.3'
+    'requests>=2.13.0',
+    'lxml>=3.7.3',
     'cssselect>=1.0.1'
 ]
 
