@@ -4,6 +4,9 @@ import argparse
 import logging
 import time
 
+from rss_scrapper.configuration import load_yaml_path
+from rss_scrapper.task_factory import execute_configuration
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -15,8 +18,8 @@ def main():
     # Logging
     parser.add_argument(
         '--log', action='store', required=False,
-        dest='log_level', default='4',
-        help='logging level (default=4):'
+        dest='log_level', default='5',
+        help='logging level (default=5):'
              '\n0=off, 1=critical, 2=errors, 3=warnings, 4=info, 5=debug'
     )
     parser.add_argument(
@@ -33,6 +36,11 @@ def main():
         handler = logging.FileHandler(args.logOutput)
     else:
         handler = logging.StreamHandler()
+
+    formatter = logging.Formatter(
+        '%(name)s |%(asctime)s| %(levelname)-7s %(module)s:%(lineno)-3d -'
+        ' %(message)s')
+    handler.setFormatter(formatter)
 
     logger.addHandler(handler)
     log_levels = {
@@ -51,6 +59,9 @@ def main():
 
     start = time.time()
     logger.debug("Starting...")
+
+    conf = load_yaml_path("input.yaml")
+    execute_configuration(conf)
 
     logger.debug("Done in %.02fs." % (time.time() - start))
 

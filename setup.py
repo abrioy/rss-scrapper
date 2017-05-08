@@ -10,11 +10,12 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    # TODO: put package requirements here
+    'PyYAML>=3.11',
+    'requests>=2.13.0'
 ]
 
 test_requirements = [
-    # TODO: put package test requirements here
+
 ]
 
 setup(
@@ -32,7 +33,7 @@ setup(
                  'rss_scrapper'},
     entry_points={
         'console_scripts': [
-            'rss_scrapper=rss_scrapper.cli:main'
+            'rss_scrapper=rss_scrapper:main'
         ]
     },
     include_package_data=True,
