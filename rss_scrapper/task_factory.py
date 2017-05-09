@@ -10,6 +10,7 @@ import rss_scrapper.modules.xpath
 import rss_scrapper.modules.selector
 import rss_scrapper.modules.regex
 import rss_scrapper.modules.rss_gen
+import rss_scrapper.modules.write
 
 logger = logging.getLogger(__name__)
 TASKS = [
@@ -21,6 +22,7 @@ TASKS = [
     rss_scrapper.modules.selector.SelectorTask,
     rss_scrapper.modules.regex.RegexTask,
     rss_scrapper.modules.rss_gen.RssGenTask,
+    rss_scrapper.modules.write.WriteTask,
 ]
 TASKS_MAP = {task.name: task for task in TASKS}
 

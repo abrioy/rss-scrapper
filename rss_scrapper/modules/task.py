@@ -69,8 +69,13 @@ class Task:
             task = tasks[index]
             res = task.execute(data)
 
-            for res_data in res:
-                yield from self.execute_tasks(tasks, res_data, index=index + 1)
+            try:
+                for res_data in res:
+                    yield from self.execute_tasks(tasks, res_data,
+                                                  index=index + 1)
+            except TypeError:
+                yield data
+                return
 
     def __str__(self):
         return self.__class__.name
