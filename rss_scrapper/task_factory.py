@@ -57,18 +57,6 @@ def create_tasks(tasks_conf):
     return tasks
 
 
-def execute_tasks(tasks, data, index=0):
-    if index >= len(tasks):
-        yield data
-        return
-
-    task = tasks[index]
-    res = task.execute(data)
-
-    for res_data in res:
-        yield from execute_tasks(tasks, res_data, index=index + 1)
-
-
 def execute_configuration(conf, dry_run=False):
     if "feeds" not in conf:
         logger.error("The configuration lacks a feeds collection,"

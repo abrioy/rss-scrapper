@@ -42,40 +42,38 @@ class RssGenTask(Task):
                 rss_scrapper.task_factory.create_tasks(att_tasks_conf)
 
     def do_execute(self, data):
-        input_res = rss_scrapper.task_factory.execute_tasks(
-            self.input_tasks, data)
+        input_res = self.execute_tasks(self.input_tasks, data)
         input_data_list = list(input_res)
 
         # Rss feed header
         fg = FeedGenerator()
-        fill_feed_info(fg, self.output_feed_tasks, data)
+        self.fill_feed_info(fg, self.output_feed_tasks, data)
 
         # Feed content
         for data in input_data_list:
             feed_entry = fg.add_entry()
-            fill_feed_info(feed_entry, self.output_elems_tasks, data)
+            self.fill_feed_info(feed_entry, self.output_elems_tasks, data)
 
         yield fg.rss_str(pretty=True)
 
+    def fill_feed_info(self, info, elements_tasks, data):
+        for attribute, att_tasks in elements_tasks.items():
+            res = self.execute_tasks(att_tasks, data)
 
-def fill_feed_info(info, elements_tasks, data):
-    for attribute, att_tasks in elements_tasks.items():
-        res = rss_scrapper.task_factory.execute_tasks(att_tasks, data)
+            res_data = list(res)
+            if len(res_data) == 0:
+                logger.warning("The output task for the attribute %s has"
+                               " not returned any data, skipping the"
+                               " attribute" % attribute)
+            elif len(res_data) > 1:
+                logger.warning("The output task for the attribute %s has"
+                               " returned more than one value, skipping"
+                               " the attribute" % attribute)
+            else:
+                # FIXME: Quick fix because the link attribute expects a dict
+                if attribute == "link":
+                    res_data[0] = {'href': res_data[0]}
 
-        res_data = list(res)
-        if len(res_data) == 0:
-            logger.warning("The output task for the attribute %s has"
-                           " not returned any data, skipping the"
-                           " attribute" % attribute)
-        elif len(res_data) > 1:
-            logger.warning("The output task for the attribute %s has"
-                           " returned more than one value, skipping"
-                           " the attribute" % attribute)
-        else:
-            # FIXME: Quick because the link attribute expects a dictionary
-            if attribute == "link":
-                res_data[0] = {'href': res_data[0]}
-
-            # Calling the setter
-            setter = getattr(info, attribute)
-            setter(res_data[0])
+                # Calling the setter
+                setter = getattr(info, attribute)
+                setter(res_data[0])

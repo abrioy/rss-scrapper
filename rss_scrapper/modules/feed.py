@@ -20,4 +20,4 @@ class FeedTask(Task):
         self.tasks = rss_scrapper.task_factory.create_tasks(args)
 
     def do_execute(self, data):
-        return rss_scrapper.task_factory.execute_tasks(self.tasks, data)
+        return self.execute_tasks(self.tasks, data)

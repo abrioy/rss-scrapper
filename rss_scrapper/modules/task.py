@@ -62,5 +62,15 @@ class Task:
         """
         raise NotImplementedError
 
+    def execute_tasks(self, tasks, data, index=0):
+        if index >= len(tasks):
+            yield data
+        else:
+            task = tasks[index]
+            res = task.execute(data)
+
+            for res_data in res:
+                yield from self.execute_tasks(tasks, res_data, index=index + 1)
+
     def __str__(self):
         return self.__class__.name
