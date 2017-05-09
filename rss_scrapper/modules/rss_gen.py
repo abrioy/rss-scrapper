@@ -9,6 +9,8 @@ logger = logging.getLogger(__name__)
 
 
 class RssGenTask(Task):
+    name = "rss_gen"
+
     input_tasks = []
     output_feed_tasks = {}
     output_elems_tasks = {}

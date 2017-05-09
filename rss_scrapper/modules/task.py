@@ -7,6 +7,8 @@ logger = logging.getLogger(__name__)
 
 
 class Task:
+    name = "task"
+
     args = None
 
     def __init__(self, args):
@@ -49,7 +51,7 @@ class Task:
 
         res = self.do_execute(data)
 
-        logger.debug("Stop task: %s" % self)
+        logger.debug("Stop task:  %s" % self)
         return res
 
     def do_execute(self, data):
@@ -61,7 +63,7 @@ class Task:
         raise NotImplementedError
 
     def __str__(self):
-        return self.__class__.__name__
+        return self.__class__.name
 
     @staticmethod
     def get_parameter(conf, param_name=None, param_type=None, optional=False):
@@ -95,10 +97,15 @@ class Task:
             param = conf[param_name]
 
         # Type check
-        if param_type is not None and not isinstance(param, param_type):
-            raise ConfigurationError("the %s parameter does not have the"
-                                     " correct type, expected %s and got %s"
-                                     % (param_name, param_type,
-                                        type(param)),
-                                     conf)
+        if param_type is not None:
+            if not isinstance(param, param_type):
+                raise ConfigurationError("the %s parameter does not have the"
+                                         " correct type, expected %s and"
+                                         " got %s"
+                                         % (param_name, param_type,
+                                            type(param)),
+                                         conf)
+            else:
+                return param_type(param)
+
         return param

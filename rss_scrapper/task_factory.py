@@ -12,17 +12,17 @@ import rss_scrapper.modules.regex
 import rss_scrapper.modules.rss_gen
 
 logger = logging.getLogger(__name__)
-
-TASKS_MAP = {
-    "dummy": rss_scrapper.modules.dummy.DummyTask,
-    "feed": rss_scrapper.modules.feed.FeedTask,
-    "text": rss_scrapper.modules.text.TextTask,
-    "get": rss_scrapper.modules.get.GetTask,
-    "xpath": rss_scrapper.modules.xpath.XPathTask,
-    "selector": rss_scrapper.modules.selector.SelectorTask,
-    "regex": rss_scrapper.modules.regex.RegexTask,
-    "rss_gen": rss_scrapper.modules.rss_gen.RssGenTask,
-}
+TASKS = [
+    rss_scrapper.modules.dummy.DummyTask,
+    rss_scrapper.modules.feed.FeedTask,
+    rss_scrapper.modules.text.TextTask,
+    rss_scrapper.modules.get.GetTask,
+    rss_scrapper.modules.xpath.XPathTask,
+    rss_scrapper.modules.selector.SelectorTask,
+    rss_scrapper.modules.regex.RegexTask,
+    rss_scrapper.modules.rss_gen.RssGenTask,
+]
+TASKS_MAP = {task.name: task for task in TASKS}
 
 
 def create_task(name, args):

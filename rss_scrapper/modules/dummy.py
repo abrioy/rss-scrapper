@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 class DummyTask(Task):
+    name = "dummy"
 
     def init(self, args):
         pass

@@ -10,6 +10,8 @@ logger = logging.getLogger(__name__)
 
 
 class XPathTask(Task):
+    name = "xpath"
+
     expression = None
 
     def init(self, args):
@@ -21,3 +23,7 @@ class XPathTask(Task):
         elements = dom.xpath(self.expression)
         for element in elements:
             yield tostring(element, encoding='unicode')
+
+    def __str__(self):
+        return ("%s (expression: '%s')"
+                % (self.name, self.expression))

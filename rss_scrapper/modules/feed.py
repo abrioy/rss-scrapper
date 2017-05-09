@@ -8,6 +8,8 @@ logger = logging.getLogger(__name__)
 
 
 class FeedTask(Task):
+    name = "feed"
+
     tasks = []
 
     def init(self, args):

@@ -7,6 +7,8 @@ logger = logging.getLogger(__name__)
 
 
 class TextTask(Task):
+    name = "text"
+
     text = None
 
     def init(self, args):
@@ -14,3 +16,7 @@ class TextTask(Task):
 
     def do_execute(self, data):
         yield self.text
+
+    def __str__(self):
+        return ("%s (string: '%s')"
+                % (self.name, self.text))

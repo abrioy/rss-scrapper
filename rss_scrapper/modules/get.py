@@ -9,6 +9,8 @@ logger = logging.getLogger(__name__)
 
 
 class GetTask(Task):
+    name = "get"
+
     url = None
 
     def init(self, args):
@@ -23,3 +25,7 @@ class GetTask(Task):
 
         response = requests.get(self.url)
         yield response.text
+
+    def __str__(self):
+        return ("%s (url: '%s')"
+                % (self.name, self.url))
