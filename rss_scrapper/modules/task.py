@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from configuration import ConfigurationError
+from rss_scrapper.configuration import ConfigurationError
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ class Task:
         try:
             self.init(args)
         except ConfigurationError as e:
-            e.task_path = str(self) + "/" + e.task_path
+            e.task_path = "/" + self.name + e.task_path
             raise e
 
     def init(self, args):
@@ -64,48 +64,3 @@ class Task:
 
     def __str__(self):
         return self.__class__.name
-
-    @staticmethod
-    def get_parameter(conf, param_name=None, param_type=None, optional=False):
-        if param_name is None:
-            param = conf
-        else:
-            if conf is None:
-                if optional:
-                    return None
-                else:
-                    raise ConfigurationError(
-                        "parameter %s not found, this task expected a"
-                        " configuration and got nothing (is there an"
-                        " indentation problem ?)" % param_name, conf)
-
-            if not isinstance(conf, dict):
-                if optional:
-                    return None
-                else:
-                    raise ConfigurationError(
-                        "the task expects a dictionary as its configuration,"
-                        " parameter %s not found" % param_name, conf)
-
-            if param_name not in conf:
-                if optional:
-                    return None
-                else:
-                    raise ConfigurationError(
-                        "the task lacks a mandatory parameter: %s"
-                        % param_name, conf)
-            param = conf[param_name]
-
-        # Type check
-        if param_type is not None:
-            if not isinstance(param, param_type):
-                raise ConfigurationError("the %s parameter does not have the"
-                                         " correct type, expected %s and"
-                                         " got %s"
-                                         % (param_name, param_type,
-                                            type(param)),
-                                         conf)
-            else:
-                return param_type(param)
-
-        return param

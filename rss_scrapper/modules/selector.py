@@ -2,8 +2,8 @@
 import logging
 from cssselect import GenericTranslator
 
-from modules.xpath import XPathTask
-from rss_scrapper.modules.task import Task
+from rss_scrapper.configuration_utils import get_parameter
+from rss_scrapper.modules.xpath import XPathTask
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +14,7 @@ class SelectorTask(XPathTask):
     selector_text = None
 
     def init(self, args):
-        self.selector_text = Task.get_parameter(args, param_type=str)
+        self.selector_text = get_parameter(args, param_type=str)
         self.expression = GenericTranslator().css_to_xpath(self.selector_text)
 
     def __str__(self):

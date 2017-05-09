@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
-
 from lxml.html import fromstring
 from lxml.etree import tostring
 
+from rss_scrapper.configuration_utils import get_parameter
 from rss_scrapper.modules.task import Task
 
 logger = logging.getLogger(__name__)
@@ -15,7 +15,7 @@ class XPathTask(Task):
     expression = None
 
     def init(self, args):
-        self.expression = Task.get_parameter(args, param_type=str)
+        self.expression = get_parameter(args, param_type=str)
 
     def do_execute(self, data):
         dom = fromstring(data)

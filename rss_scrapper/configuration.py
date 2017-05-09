@@ -53,6 +53,6 @@ class ConfigurationError(Exception):
         message += super(ConfigurationError, self).__str__()
 
         if self.node is not None:
-            message += "- invalid configuration: \n%s" % self.node
+            message += " - invalid configuration: \n%s" % self.node
 
         return message

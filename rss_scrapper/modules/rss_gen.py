@@ -3,6 +3,7 @@ import logging
 from feedgen.feed import FeedGenerator
 
 import rss_scrapper.task_factory
+from rss_scrapper.configuration_utils import get_parameter
 from rss_scrapper.modules.task import Task
 
 logger = logging.getLogger(__name__)
@@ -17,15 +18,15 @@ class RssGenTask(Task):
     copy_fields = None
 
     def init(self, args):
-        self.copy_fields = Task.get_parameter(args, "copy_fields", bool,
-                                              optional=True)
+        self.copy_fields = get_parameter(args, "copy_fields", bool,
+                                         optional=True)
         if self.copy_fields is None:
             self.copy_fields = False
 
-        input_conf = Task.get_parameter(args, "input", list)
-        output_conf = Task.get_parameter(args, "output", dict)
-        output_feed_conf = Task.get_parameter(output_conf, "feed", dict)
-        output_elems_conf = Task.get_parameter(output_conf, "elements", dict)
+        input_conf = get_parameter(args, "input", list)
+        output_conf = get_parameter(args, "output", dict)
+        output_feed_conf = get_parameter(output_conf, "feed", dict)
+        output_elems_conf = get_parameter(output_conf, "elements", dict)
 
         self.input_tasks = \
             rss_scrapper.task_factory.create_tasks(input_conf)

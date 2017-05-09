@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
+import requests
 
-import requests as requests
-
+from rss_scrapper.configuration_utils import get_parameter
 from rss_scrapper.modules.task import Task
 
 logger = logging.getLogger(__name__)
@@ -14,7 +14,7 @@ class GetTask(Task):
     url = None
 
     def init(self, args):
-        self.url = Task.get_parameter(args, "url", str)
+        self.url = get_parameter(args, "url", str)
         # TODO: Add auth to parameters
 
     def do_execute(self, data):
