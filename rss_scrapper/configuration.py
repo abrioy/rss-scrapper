@@ -35,20 +35,20 @@ def validate_task_name(task_name):
 
 class ConfigurationError(Exception):
     none = None
-    task_path = ""
+    task = None
 
-    def __init__(self, message, node=None, task_path=None):
+    def __init__(self, message, node=None, task=None):
         super(ConfigurationError, self).__init__(message)
 
         self.node = node
-        if task_path is not None:
-            self.task_path = task_path
+        if task is not None:
+            self.task = task
 
     def __str__(self):
         message = ""
 
-        if self.task_path is not "":
-            message += "[task: " + self.task_path + "] "
+        if self.task:
+            message += "[task: " + self.task.get_path() + "] "
 
         message += super(ConfigurationError, self).__str__()
 

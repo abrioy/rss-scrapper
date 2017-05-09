@@ -11,6 +11,7 @@ import rss_scrapper.modules.selector
 import rss_scrapper.modules.regex
 import rss_scrapper.modules.rss_gen
 import rss_scrapper.modules.write
+import rss_scrapper.modules.concat
 
 logger = logging.getLogger(__name__)
 TASKS = [
@@ -23,19 +24,20 @@ TASKS = [
     rss_scrapper.modules.regex.RegexTask,
     rss_scrapper.modules.rss_gen.RssGenTask,
     rss_scrapper.modules.write.WriteTask,
+    rss_scrapper.modules.concat.ConcatTask,
 ]
 TASKS_MAP = {task.name: task for task in TASKS}
 
 
-def create_task(name, args):
+def create_task(name, args, base_path=""):
     if name not in TASKS_MAP:
         raise ConfigurationError("the task '%s' does not exist" % name)
     else:
         task_class = TASKS_MAP[name]
-        return task_class(args)
+        return task_class(args, path=base_path)
 
 
-def create_tasks(tasks_conf):
+def create_tasks(tasks_conf, base_path=""):
     tasks = []
 
     if not isinstance(tasks_conf, list):
@@ -51,7 +53,8 @@ def create_tasks(tasks_conf):
             validate_task_name(task_name)
 
             try:
-                tasks.append(create_task(task_name, task_args))
+                tasks.append(create_task(task_name, task_args,
+                                         base_path=base_path))
             except ConfigurationError as e:
                 e.node = task_conf
                 raise e

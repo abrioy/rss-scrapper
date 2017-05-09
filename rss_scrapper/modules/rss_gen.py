@@ -2,7 +2,6 @@
 import logging
 from feedgen.feed import FeedGenerator
 
-import rss_scrapper.task_factory
 from rss_scrapper.configuration_utils import get_parameter
 from rss_scrapper.modules.task import Task
 
@@ -29,17 +28,19 @@ class RssGenTask(Task):
         output_elems_conf = get_parameter(output_conf, "elements", dict)
 
         self.input_tasks = \
-            rss_scrapper.task_factory.create_tasks(input_conf)
+            self.create_subtasks(input_conf, subpath="input")
 
         # Feed attributes tasks
         for attribute, att_tasks_conf in output_feed_conf.items():
+            subpath = "feed/" + attribute
             self.output_feed_tasks[attribute] = \
-                rss_scrapper.task_factory.create_tasks(att_tasks_conf)
+                self.create_subtasks(att_tasks_conf, subpath=subpath)
 
         # Elements attributes tasks
         for attribute, att_tasks_conf in output_elems_conf.items():
+            subpath = "elements/" + attribute
             self.output_elems_tasks[attribute] = \
-                rss_scrapper.task_factory.create_tasks(att_tasks_conf)
+                self.create_subtasks(att_tasks_conf, subpath=subpath)
 
     def do_execute(self, data):
         input_res = self.execute_tasks(self.input_tasks, data)

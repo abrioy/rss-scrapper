@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 
+import rss_scrapper.task_factory
 from rss_scrapper.configuration import ConfigurationError
 
 logger = logging.getLogger(__name__)
@@ -8,10 +9,11 @@ logger = logging.getLogger(__name__)
 
 class Task:
     name = "task"
+    path = ""
 
     args = None
 
-    def __init__(self, args):
+    def __init__(self, args, path=""):
         """
         The constructor calls the self.init() function and logs the
          ConfigurationError that it catches, it is not intended to be
@@ -19,10 +21,12 @@ class Task:
         :param args:
         """
         self.args = args
+        self.path = path
         try:
             self.init(args)
         except ConfigurationError as e:
-            e.task_path = "/" + self.name + e.task_path
+            if e.task is None:
+                e.task = self
             raise e
 
     def init(self, args):
@@ -46,12 +50,10 @@ class Task:
         :param data: a (most likely unicode) string of data
         :return: a generator of (preferably unicode) strings
         """
-        logger.debug("%s\n%s" % (type(data), data))
-        logger.debug("Start task: %s" % self)
+        # logger.debug("%s\n%s" % (type(data), data))
+        logger.debug("Execute task: %s" % self.get_path())
 
         res = self.do_execute(data)
-
-        logger.debug("Stop task:  %s" % self)
         return res
 
     def do_execute(self, data):
@@ -69,13 +71,27 @@ class Task:
             task = tasks[index]
             res = task.execute(data)
 
-            try:
-                for res_data in res:
-                    yield from self.execute_tasks(tasks, res_data,
-                                                  index=index + 1)
-            except TypeError:
-                yield data
-                return
+            for res_data in res:
+                yield from self.execute_tasks(tasks, res_data, index=index + 1)
+
+    def create_subtask(self, args, subpath=None):
+        path = self.get_path()
+        if subpath is not None:
+            path += "[%s]" % subpath
+
+        return rss_scrapper.task_factory.create_task(
+            args, base_path=path)
+
+    def create_subtasks(self, args, subpath=None):
+        path = self.get_path()
+        if subpath is not None:
+            path += "[%s]" % subpath
+
+        return rss_scrapper.task_factory.create_tasks(
+            args, base_path=path)
+
+    def get_path(self):
+        return self.path + '/' + self.name
 
     def __str__(self):
         return self.__class__.name

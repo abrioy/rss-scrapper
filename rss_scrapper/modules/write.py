@@ -19,6 +19,8 @@ class WriteTask(Task):
         with open(self.file_name, 'wb') as file:
             file.write(data)
 
+        yield data
+
     def __str__(self):
         return ("%s (file: '%s')"
                 % (self.name, self.file_name))

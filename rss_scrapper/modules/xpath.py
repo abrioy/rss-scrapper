@@ -22,7 +22,10 @@ class XPathTask(Task):
 
         elements = dom.xpath(self.expression)
         for element in elements:
-            yield tostring(element, encoding='unicode')
+            if isinstance(element, str):
+                yield element
+            else:
+                yield tostring(element, encoding='unicode')
 
     def __str__(self):
         return ("%s (expression: '%s')"
