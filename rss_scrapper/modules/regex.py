@@ -11,21 +11,30 @@ logger = logging.getLogger(__name__)
 class RegexTask(Task):
     name = "regex"
 
-    pattern = None
-    replace = None
+    pattern = ""
+    pattern_expression = None
+    replace = ""
     flags = 0
 
-    def init(self, args):
-        pattern_text = get_parameter(args, "pattern", str)
-        self.flags = get_parameter(args, "flags", int, optional=True)
-        if self.flags is None:
-            self.flags = 0
-        self.pattern = compile(pattern_text, int(self.flags))
+    def init(self, pattern=None, replace=None, flags=None):
+        if pattern is not None:
+            self.pattern = pattern
+        if replace is not None:
+            self.replace = replace
+        if flags is not None:
+            self.flags = flags
 
-        self.replace = get_parameter(args, "replace", str)
+        self.pattern_expression = compile(self.pattern, self.flags)
+
+    def init_conf(self, conf):
+        pattern = get_parameter(conf, "pattern", str)
+        replace = get_parameter(conf, "replace", str)
+        flags = get_parameter(conf, "flags", int, optional=True)
+
+        self.init(pattern, replace, flags)
 
     def do_execute(self, data):
-        yield self.pattern.sub(self.replace, data)
+        yield self.pattern_expression.sub(self.replace, data)
 
     def __str__(self):
         return ("%s (pattern: '%s', flags: %d, replace: '%s')"

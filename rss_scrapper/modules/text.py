@@ -10,10 +10,16 @@ logger = logging.getLogger(__name__)
 class TextTask(Task):
     name = "text"
 
-    text = None
+    text = ""
 
-    def init(self, args):
-        self.text = get_parameter(args, param_type=str)
+    def init(self, text=None):
+        if text is not None:
+            self.text = text
+
+    def init_conf(self, conf):
+        text = get_parameter(conf, param_type=str)
+
+        self.init(text)
 
     def do_execute(self, data):
         yield self.text

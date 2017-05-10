@@ -9,7 +9,10 @@ logger = logging.getLogger(__name__)
 class DummyTask(Task):
     name = "dummy"
 
-    def init(self, args):
+    def init(self):
+        pass
+
+    def init_conf(self, conf):
         pass
 
     def do_execute(self, data):

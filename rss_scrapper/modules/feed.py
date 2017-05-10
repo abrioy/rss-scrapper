@@ -11,12 +11,18 @@ class FeedTask(Task):
 
     tasks = []
 
-    def init(self, args):
-        if len(args) == 0:
+    def init(self, tasks=None):
+        if tasks is not None:
+            self.tasks = tasks
+
+        if len(tasks) == 0:
             logger.warning("There is no tasks in this feed, nothing will"
                            "be generated")
 
-        self.tasks = self.create_subtasks(args)
+    def init_conf(self, conf):
+        tasks = self.create_subtasks(conf)
+
+        self.init(tasks)
 
     def do_execute(self, data):
         return self.execute_tasks(self.tasks, data)

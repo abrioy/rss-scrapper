@@ -29,15 +29,15 @@ TASKS = [
 TASKS_MAP = {task.name: task for task in TASKS}
 
 
-def create_task(name, args, base_path=""):
+def create_task(name, args, parent_task=None):
     if name not in TASKS_MAP:
         raise ConfigurationError("the task '%s' does not exist" % name)
     else:
         task_class = TASKS_MAP[name]
-        return task_class(args, path=base_path)
+        return task_class(args, parent_task=parent_task)
 
 
-def create_tasks(tasks_conf, base_path=""):
+def create_tasks(tasks_conf, parent_task=None):
     tasks = []
 
     if not isinstance(tasks_conf, list):
@@ -54,7 +54,7 @@ def create_tasks(tasks_conf, base_path=""):
 
             try:
                 tasks.append(create_task(task_name, task_args,
-                                         base_path=base_path))
+                                         parent_task=parent_task))
             except ConfigurationError as e:
                 e.node = task_conf
                 raise e

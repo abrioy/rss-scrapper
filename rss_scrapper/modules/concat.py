@@ -9,10 +9,16 @@ logger = logging.getLogger(__name__)
 class ConcatTask(Task):
     name = "concat"
 
-    tasks = None
+    tasks = []
 
-    def init(self, args):
-        self.tasks = self.create_subtasks(args)
+    def init(self, tasks=None):
+        if tasks is not None:
+            self.tasks = tasks
+
+    def init_conf(self, conf):
+        tasks = self.create_subtasks(conf)
+
+        self.init(tasks)
 
     def do_execute(self, data):
         concat_res = ''

@@ -10,10 +10,16 @@ logger = logging.getLogger(__name__)
 class WriteTask(Task):
     name = "write"
 
-    file_name = None
+    file_name = ""
 
-    def init(self, args):
-        self.file_name = get_parameter(args, param_type=str)
+    def init(self, file_name=None):
+        if file_name is not None:
+            self.file_name = file_name
+
+    def init_conf(self, conf):
+        file_name = get_parameter(conf, param_type=str)
+
+        self.init(file_name)
 
     def do_execute(self, data):
         with open(self.file_name, 'wb') as file:

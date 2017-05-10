@@ -11,11 +11,17 @@ logger = logging.getLogger(__name__)
 class GetTask(Task):
     name = "get"
 
-    url = None
+    url = ""
 
-    def init(self, args):
-        self.url = get_parameter(args, "url", str)
+    def init(self, url=None):
+        if url is not None:
+            self.url = url
+
+    def init_conf(self, conf):
+        url = get_parameter(conf, "url", str)
         # TODO: Add auth to parameters
+
+        self.init(url)
 
     def do_execute(self, data):
         if data is not None:

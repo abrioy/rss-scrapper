@@ -12,10 +12,16 @@ logger = logging.getLogger(__name__)
 class XPathTask(Task):
     name = "xpath"
 
-    expression = None
+    expression = ""
 
-    def init(self, args):
-        self.expression = get_parameter(args, param_type=str)
+    def init(self, expression=None):
+        if expression is not None:
+            self.expression = expression
+
+    def init_conf(self, conf):
+        expression = get_parameter(conf, param_type=str)
+
+        self.init(expression)
 
     def do_execute(self, data):
         dom = fromstring(data)

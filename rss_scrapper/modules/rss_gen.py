@@ -11,36 +11,52 @@ logger = logging.getLogger(__name__)
 class RssGenTask(Task):
     name = "rss_gen"
 
+    copy_fields = False
     input_tasks = []
     output_feed_tasks = {}
     output_elems_tasks = {}
-    copy_fields = None
 
-    def init(self, args):
-        self.copy_fields = get_parameter(args, "copy_fields", bool,
-                                         optional=True)
-        if self.copy_fields is None:
-            self.copy_fields = False
+    def init(self, copy_fields=None, input_tasks=None, output_feed_tasks=None,
+             output_elems_tasks=None):
+        if copy_fields is not None:
+            self.copy_fields = copy_fields
+        if input_tasks is not None:
+            self.input_tasks = input_tasks
+        if output_feed_tasks is not None:
+            self.output_feed_tasks = output_feed_tasks
+        if output_elems_tasks is not None:
+            self.output_elems_tasks = output_elems_tasks
 
-        input_conf = get_parameter(args, "input", list)
-        output_conf = get_parameter(args, "output", dict)
+    def init_conf(self, conf):
+        copy_fields = get_parameter(conf, "copy_fields", bool,
+                                    optional=True)
+
+        input_conf = get_parameter(conf, "input", list)
+        output_conf = get_parameter(conf, "output", dict)
+
         output_feed_conf = get_parameter(output_conf, "feed", dict)
         output_elems_conf = get_parameter(output_conf, "elements", dict)
 
-        self.input_tasks = \
+        # Input tasks
+        input_tasks = \
             self.create_subtasks(input_conf, subpath="input")
 
         # Feed attributes tasks
+        output_feed_tasks = {}
         for attribute, att_tasks_conf in output_feed_conf.items():
             subpath = "feed/" + attribute
-            self.output_feed_tasks[attribute] = \
+            output_feed_tasks[attribute] = \
                 self.create_subtasks(att_tasks_conf, subpath=subpath)
 
         # Elements attributes tasks
+        output_elems_tasks = {}
         for attribute, att_tasks_conf in output_elems_conf.items():
             subpath = "elements/" + attribute
-            self.output_elems_tasks[attribute] = \
+            output_elems_tasks[attribute] = \
                 self.create_subtasks(att_tasks_conf, subpath=subpath)
+
+        self.init(copy_fields, input_tasks, output_feed_tasks,
+                  output_elems_tasks)
 
     def do_execute(self, data):
         input_res = self.execute_tasks(self.input_tasks, data)
