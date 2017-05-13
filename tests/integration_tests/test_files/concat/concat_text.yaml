@@ -1,0 +1,12 @@
+feeds:
+    test:
+        - concat:
+            - text: "Lorem "
+            - text: "ipsum "
+            - text: "dolor "
+            - text: "sit "
+            - text: "amet"
+
+test_expects:
+    test:
+        - "Lorem ipsum dolor sit amet"

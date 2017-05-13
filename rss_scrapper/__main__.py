@@ -4,7 +4,7 @@ import argparse
 import logging
 import time
 
-from rss_scrapper.configuration import load_yaml_path
+from rss_scrapper.configuration import load_yaml_from_path
 from rss_scrapper.task_factory import execute_configuration
 
 
@@ -60,8 +60,9 @@ def main():
     start = time.time()
     logger.debug("Starting...")
 
-    conf = load_yaml_path("input.yaml")
-    execute_configuration(conf)
+    conf = load_yaml_from_path("input.yaml")
+    res = execute_configuration(conf)
+    print(res)
 
     logger.debug("Done in %.02fs." % (time.time() - start))
 

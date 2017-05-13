@@ -6,7 +6,7 @@ from yaml import YAMLError
 logger = logging.getLogger(__name__)
 
 
-def load_yaml_path(yaml_path):
+def load_yaml_from_path(yaml_path):
     with open(yaml_path, 'r') as yaml_file:
         return load_yaml_file(yaml_file)
 

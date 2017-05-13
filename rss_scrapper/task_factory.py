@@ -46,7 +46,7 @@ def create_tasks(tasks_conf, parent_task=None):
 
     for task_conf in tasks_conf:
         if not isinstance(task_conf, dict):
-            logger.error("Expected task and for a %s" % type(task_conf))
+            logger.error("Expected a task and got a %s" % type(task_conf))
             raise ConfigurationError("incorrect task definition", task_conf)
 
         for task_name, task_args in task_conf.items():
@@ -82,16 +82,18 @@ def execute_configuration(conf, dry_run=False):
         logger.info("Validating feed %s" % feed_name)
         tasks.append((feed_name, create_task("feed", tasks_conf)))
 
+    res = {}
     for (feed_name, task) in tasks:
         if not dry_run:
             logger.info("Executing feed %s" % feed_name)
 
             task_res = task.execute(None)
 
-            res = list(task_res)
+            task_res_data = list(task_res)
 
-            if len(res) == 0:
+            if len(task_res_data) == 0:
                 logger.info("The feed %s has not returned any data,"
                             " nothing has been generated" % feed_name)
-            else:
-                logger.info(res)
+
+            res[feed_name] = task_res_data
+    return res

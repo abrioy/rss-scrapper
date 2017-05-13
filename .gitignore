@@ -63,4 +63,7 @@ target/
 .python-version
 
 # ide
-.idea
+.idea/
+
+# dev data
+dev/
