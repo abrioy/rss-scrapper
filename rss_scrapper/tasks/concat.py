@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from rss_scrapper.modules.task import Task
+from rss_scrapper.tasks.task import Task
 
 logger = logging.getLogger(__name__)
 

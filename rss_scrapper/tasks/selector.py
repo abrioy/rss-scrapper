@@ -3,7 +3,7 @@ import logging
 from cssselect import GenericTranslator
 
 from rss_scrapper.configuration_utils import get_parameter
-from rss_scrapper.modules.xpath import XPathTask
+from rss_scrapper.tasks.xpath import XPathTask
 
 logger = logging.getLogger(__name__)
 

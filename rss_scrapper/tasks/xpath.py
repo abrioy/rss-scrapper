@@ -4,7 +4,7 @@ from lxml.html import fromstring
 from lxml.etree import tostring
 
 from rss_scrapper.configuration_utils import get_parameter
-from rss_scrapper.modules.task import Task
+from rss_scrapper.tasks.task import Task
 
 logger = logging.getLogger(__name__)
 

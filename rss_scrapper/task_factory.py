@@ -2,29 +2,29 @@
 import logging
 
 from rss_scrapper.configuration import ConfigurationError, validate_task_name
-import rss_scrapper.modules.dummy
-import rss_scrapper.modules.feed
-import rss_scrapper.modules.text
-import rss_scrapper.modules.get
-import rss_scrapper.modules.xpath
-import rss_scrapper.modules.selector
-import rss_scrapper.modules.regex
-import rss_scrapper.modules.rss_gen
-import rss_scrapper.modules.write
-import rss_scrapper.modules.concat
+import rss_scrapper.tasks.dummy
+import rss_scrapper.tasks.feed
+import rss_scrapper.tasks.text
+import rss_scrapper.tasks.get
+import rss_scrapper.tasks.xpath
+import rss_scrapper.tasks.selector
+import rss_scrapper.tasks.regex
+import rss_scrapper.tasks.rss_gen
+import rss_scrapper.tasks.write
+import rss_scrapper.tasks.concat
 
 logger = logging.getLogger(__name__)
 TASKS = [
-    rss_scrapper.modules.dummy.DummyTask,
-    rss_scrapper.modules.feed.FeedTask,
-    rss_scrapper.modules.text.TextTask,
-    rss_scrapper.modules.get.GetTask,
-    rss_scrapper.modules.xpath.XPathTask,
-    rss_scrapper.modules.selector.SelectorTask,
-    rss_scrapper.modules.regex.RegexTask,
-    rss_scrapper.modules.rss_gen.RssGenTask,
-    rss_scrapper.modules.write.WriteTask,
-    rss_scrapper.modules.concat.ConcatTask,
+    rss_scrapper.tasks.dummy.DummyTask,
+    rss_scrapper.tasks.feed.FeedTask,
+    rss_scrapper.tasks.text.TextTask,
+    rss_scrapper.tasks.get.GetTask,
+    rss_scrapper.tasks.xpath.XPathTask,
+    rss_scrapper.tasks.selector.SelectorTask,
+    rss_scrapper.tasks.regex.RegexTask,
+    rss_scrapper.tasks.rss_gen.RssGenTask,
+    rss_scrapper.tasks.write.WriteTask,
+    rss_scrapper.tasks.concat.ConcatTask,
 ]
 TASKS_MAP = {task.name: task for task in TASKS}
 
