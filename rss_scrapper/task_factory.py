@@ -24,17 +24,18 @@ TASKS = [
     rss_scrapper.tasks.regex.RegexTask,
     rss_scrapper.tasks.rss_gen.RssGenTask,
     rss_scrapper.tasks.write.WriteTask,
+    rss_scrapper.tasks.write.ReadTask,
     rss_scrapper.tasks.concat.ConcatTask,
 ]
 TASKS_MAP = {task.name: task for task in TASKS}
 
 
-def create_task(name, args, parent_task=None):
+def create_task(name, conf=None, parent_task=None):
     if name not in TASKS_MAP:
         raise ConfigurationError("the task '%s' does not exist" % name)
     else:
         task_class = TASKS_MAP[name]
-        return task_class(args, parent_task=parent_task)
+        return task_class(conf=conf, parent_task=parent_task)
 
 
 def create_tasks(tasks_conf, parent_task=None):

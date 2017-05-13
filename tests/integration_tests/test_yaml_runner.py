@@ -7,7 +7,7 @@ import pytest
 from rss_scrapper.configuration import load_yaml_from_path
 from rss_scrapper.task_factory import execute_configuration
 
-TEST_FILES_FOLDER = "tests/integration_tests/test_files"
+TEST_FILES_FOLDER = "tests/integration_tests/yaml_test_files"
 TEST_EXPECTS_KEY = "test_expects"
 
 yaml_files = []
