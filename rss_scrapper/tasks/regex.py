@@ -2,6 +2,7 @@
 import logging
 from re import compile
 
+from errors import ExecutionError
 from rss_scrapper.configuration_utils import get_parameter
 from rss_scrapper.tasks.task import Task
 
@@ -34,6 +35,10 @@ class RegexTask(Task):
         self.init(pattern, replace, flags)
 
     def do_execute(self, data):
+        if data is None or not isinstance(data, str):
+            raise ExecutionError("This task can only work if it receives a"
+                                 " string", data=data)
+
         yield self.pattern_expression.sub(self.replace, data)
 
     def __str__(self):

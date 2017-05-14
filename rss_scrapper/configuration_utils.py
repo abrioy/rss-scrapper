@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from rss_scrapper.configuration import ConfigurationError
+from errors import ConfigurationError
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ def get_parameter(conf, param_name=None, param_type=None, optional=False):
                 raise ConfigurationError(
                     "parameter %s not found, this task expected a"
                     " configuration and got nothing (is there an"
-                    " indentation problem ?)" % param_name, conf)
+                    " indentation problem ?)" % param_name, conf=conf)
 
         if not isinstance(conf, dict):
             if optional:
@@ -25,7 +25,7 @@ def get_parameter(conf, param_name=None, param_type=None, optional=False):
             else:
                 raise ConfigurationError(
                     "the task expects a dictionary as its configuration,"
-                    " parameter %s not found" % param_name, conf)
+                    " parameter %s not found" % param_name, conf=conf)
 
         if param_name not in conf:
             if optional:
@@ -33,7 +33,7 @@ def get_parameter(conf, param_name=None, param_type=None, optional=False):
             else:
                 raise ConfigurationError(
                     "the task lacks a mandatory parameter: %s"
-                    % param_name, conf)
+                    % param_name, conf=conf)
         param = conf[param_name]
 
     # Type check
@@ -49,7 +49,7 @@ def get_parameter(conf, param_name=None, param_type=None, optional=False):
                                      " got %s"
                                      % (param_display_name, param_type,
                                         type(param)),
-                                     conf)
+                                     conf=conf)
         else:
             return param_type(param)
 

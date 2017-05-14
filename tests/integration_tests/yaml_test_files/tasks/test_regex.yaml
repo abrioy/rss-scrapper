@@ -1,0 +1,42 @@
+anchors:
+    base: &base
+        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+
+
+feeds:
+    test_regex_identity:
+        - <<: *base
+        - regex:
+            pattern: '(.*)'
+            replace: '\1'
+
+    test_regex_no_pattern:
+        - <<: *base
+        - regex:
+            pattern: ''
+            replace: ''
+
+    test_regex_replace_all:
+        - <<: *base
+        - regex:
+            pattern: '.*'
+            replace: 'replaced text'
+
+    test_regex_append:
+        - <<: *base
+        - regex:
+            pattern: '(.*)'
+            replace: 'beginning\1end'
+
+test_expects:
+    test_regex_identity:
+        - "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+
+    test_regex_no_pattern:
+        - "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+
+    test_regex_replace_all:
+        - "replaced text"
+
+    test_regex_append:
+        - "beginningLorem ipsum dolor sit amet, consectetur adipiscing elitend"

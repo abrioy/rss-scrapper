@@ -9,6 +9,7 @@ from rss_scrapper.task_factory import execute_configuration
 
 TEST_FILES_FOLDER = "tests/integration_tests/yaml_test_files"
 TEST_EXPECTS_KEY = "test_expects"
+FEEDS_KEY = "feeds"
 
 yaml_files = []
 for root, dirnames, filenames in os.walk(TEST_FILES_FOLDER):
@@ -25,9 +26,15 @@ def yaml_file(request):
 def test_configuration(yaml_file):
     conf = load_yaml_from_path(yaml_file)
 
-    assert TEST_EXPECTS_KEY in conf, "yaml file should be a test file"
+    assert TEST_EXPECTS_KEY in conf, \
+        "yaml file should contains expected test results"
+    assert FEEDS_KEY in conf, "yaml file should contains a feed"
 
     res = execute_configuration(conf)
+
+    for feed_name in conf[FEEDS_KEY].keys():
+        assert feed_name in conf[TEST_EXPECTS_KEY], \
+            "no expected result entry for the feed %s" % feed_name
 
     for test_name, test_result in conf[TEST_EXPECTS_KEY].items():
         assert test_name in res, "expected a test named %s" % test_name

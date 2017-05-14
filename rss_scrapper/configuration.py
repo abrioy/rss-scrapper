@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 import logging
+
 import yaml
 from yaml import YAMLError
+
+from errors import ConfigurationError
 
 logger = logging.getLogger(__name__)
 
@@ -30,29 +33,4 @@ def validate_task_name(task_name):
                          "The task's arguments should have one more "
                          "indentation level than its name")
         raise ConfigurationError("task name should be a string",
-                                 task_name)
-
-
-class ConfigurationError(Exception):
-    none = None
-    task = None
-
-    def __init__(self, message, node=None, task=None):
-        super(ConfigurationError, self).__init__(message)
-
-        self.node = node
-        if task is not None:
-            self.task = task
-
-    def __str__(self):
-        message = ""
-
-        if self.task:
-            message += "[task: " + self.task.get_path() + "] "
-
-        message += super(ConfigurationError, self).__str__()
-
-        if self.node is not None:
-            message += " - invalid configuration: \n%s" % self.node
-
-        return message
+                                 conf=task_name)

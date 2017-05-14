@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from rss_scrapper.configuration import ConfigurationError, validate_task_name
+from rss_scrapper.configuration import validate_task_name
+from errors import ConfigurationError
 import rss_scrapper.tasks.dummy
 import rss_scrapper.tasks.feed
 import rss_scrapper.tasks.text
@@ -43,12 +44,13 @@ def create_tasks(tasks_conf, parent_task=None):
 
     if not isinstance(tasks_conf, list):
         logger.error("Expected a task list and got a %s" % type(tasks_conf))
-        raise ConfigurationError("no task list found", tasks_conf)
+        raise ConfigurationError("no task list found", conf=tasks_conf)
 
     for task_conf in tasks_conf:
         if not isinstance(task_conf, dict):
             logger.error("Expected a task and got a %s" % type(task_conf))
-            raise ConfigurationError("incorrect task definition", task_conf)
+            raise ConfigurationError("incorrect task definition",
+                                     conf=task_conf)
 
         for task_name, task_args in task_conf.items():
             validate_task_name(task_name)
@@ -57,7 +59,7 @@ def create_tasks(tasks_conf, parent_task=None):
                 tasks.append(create_task(task_name, task_args,
                                          parent_task=parent_task))
             except ConfigurationError as e:
-                e.node = task_conf
+                e.conf = task_conf
                 raise e
 
     return tasks
@@ -68,7 +70,7 @@ def execute_configuration(conf, dry_run=False):
         logger.error("The configuration lacks a feeds collection,"
                      " the yaml file should have a 'feeds' dictionary"
                      " at the top level")
-        raise ConfigurationError("no feeds found", conf)
+        raise ConfigurationError("no feeds found", conf=conf)
 
     feeds = conf["feeds"]
     if not isinstance(feeds, dict):

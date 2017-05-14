@@ -2,7 +2,7 @@
 import logging
 
 import rss_scrapper.task_factory
-from rss_scrapper.configuration import ConfigurationError
+from errors import TaskError
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ class Task:
         if conf is not None:
             try:
                 self.init_conf(conf)
-            except ConfigurationError as e:
+            except TaskError as e:
                 if e.task is None:
                     e.task = self
                 raise e
