@@ -4,7 +4,7 @@ import logging
 import yaml
 from yaml import YAMLError
 
-from errors import ConfigurationError
+from rss_scrapper.errors import ConfigurationError
 
 logger = logging.getLogger(__name__)
 

@@ -2,7 +2,7 @@
 import logging
 
 import rss_scrapper.task_factory
-from errors import TaskError
+from rss_scrapper.errors import TaskError
 
 logger = logging.getLogger(__name__)
 

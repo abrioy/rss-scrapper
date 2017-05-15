@@ -2,7 +2,7 @@
 import logging
 
 from rss_scrapper.configuration import validate_task_name
-from errors import ConfigurationError
+from rss_scrapper.errors import ConfigurationError
 import rss_scrapper.tasks.dummy
 import rss_scrapper.tasks.feed
 import rss_scrapper.tasks.text

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from errors import ConfigurationError
+from rss_scrapper.errors import ConfigurationError
 
 logger = logging.getLogger(__name__)
 

@@ -2,7 +2,7 @@
 import logging
 from re import compile
 
-from errors import ExecutionError
+from rss_scrapper.errors import ExecutionError
 from rss_scrapper.configuration_utils import get_parameter
 from rss_scrapper.tasks.task import Task
 
