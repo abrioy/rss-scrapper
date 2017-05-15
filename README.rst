@@ -8,14 +8,19 @@ Rss Scrapper
 
 .. image:: https://img.shields.io/travis/abrioy/rss_scrapper.svg
         :target: https://travis-ci.org/abrioy/rss_scrapper
+        :alt: Build status
+
+.. image:: https://coveralls.io/repos/github/abrioy/rss_scrapper/badge.svg?branch=master
+        :target: https://coveralls.io/github/abrioy/rss_scrapper?branch=master
+        :alt: Coverage
 
 .. image:: https://readthedocs.org/projects/rss-scrapper/badge/?version=latest
         :target: https://rss-scrapper.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
 .. image:: https://pyup.io/repos/github/abrioy/rss_scrapper/shield.svg
-     :target: https://pyup.io/repos/github/abrioy/rss_scrapper/
-     :alt: Updates
+         :target: https://pyup.io/repos/github/abrioy/rss_scrapper/
+         :alt: Updates
 
 
 Python Boilerplate contains all the boilerplate you need to create a Python package.
