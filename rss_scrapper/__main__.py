@@ -55,8 +55,7 @@ def main():
         logger.debug("Starting...")
 
         conf = load_yaml_from_path(args.configuration)
-        res = execute_configuration(conf)
-        print(res)
+        execute_configuration(conf)
 
         logger.debug("Done in %.02fs." % (time.time() - start))
 
