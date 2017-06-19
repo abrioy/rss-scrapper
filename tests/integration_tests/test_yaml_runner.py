@@ -39,4 +39,4 @@ def test_configuration(yaml_file):
     for test_name, test_result in conf[TEST_EXPECTS_KEY].items():
         assert test_name in res, "expected a test named %s" % test_name
 
-        assert test_result == res[test_name]
+        assert res[test_name] == test_result

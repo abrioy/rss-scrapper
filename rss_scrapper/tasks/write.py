@@ -10,7 +10,7 @@ class WriteTask(ReadTask):
     name = "write"
 
     def do_execute(self, data):
-        with open(self.file_name, 'wb') as file:
+        with open(self.file_name, 'w', encoding=self.encoding) as file:
             file.write(data)
 
         yield data
