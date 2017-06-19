@@ -1,0 +1,7 @@
+feeds:
+    test_dump_text:
+        - text: "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+        - dump
+
+test_expects:
+    test_dump_text: []
