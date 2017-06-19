@@ -65,7 +65,10 @@ class Task:
         logger.debug("Execute task: %s" % self.get_path())
 
         res = self.do_execute(data)
-        return res
+        if res is None:
+            yield from []
+        else:
+            return res
 
     def do_execute(self, data):
         """

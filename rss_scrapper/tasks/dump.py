@@ -16,4 +16,4 @@ class DumpTask(Task):
         pass
 
     def do_execute(self, data):
-        yield from []
+        pass

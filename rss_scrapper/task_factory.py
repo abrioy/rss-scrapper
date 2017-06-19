@@ -3,10 +3,10 @@ import logging
 
 from rss_scrapper.configuration import validate_task_name
 from rss_scrapper.errors import ConfigurationError
+import rss_scrapper.tasks.execute
 import rss_scrapper.tasks.dummy
 import rss_scrapper.tasks.print
 import rss_scrapper.tasks.dump
-import rss_scrapper.tasks.feed
 import rss_scrapper.tasks.text
 import rss_scrapper.tasks.get
 import rss_scrapper.tasks.xpath
@@ -15,13 +15,14 @@ import rss_scrapper.tasks.regex
 import rss_scrapper.tasks.rss_gen
 import rss_scrapper.tasks.write
 import rss_scrapper.tasks.concat
+import rss_scrapper.tasks.fork
 
 logger = logging.getLogger(__name__)
 TASKS = [
+    rss_scrapper.tasks.execute.ExecuteTask,
     rss_scrapper.tasks.dummy.DummyTask,
     rss_scrapper.tasks.print.PrintTask,
     rss_scrapper.tasks.dump.DumpTask,
-    rss_scrapper.tasks.feed.FeedTask,
     rss_scrapper.tasks.text.TextTask,
     rss_scrapper.tasks.get.GetTask,
     rss_scrapper.tasks.xpath.XPathTask,
@@ -31,6 +32,7 @@ TASKS = [
     rss_scrapper.tasks.write.WriteTask,
     rss_scrapper.tasks.write.ReadTask,
     rss_scrapper.tasks.concat.ConcatTask,
+    rss_scrapper.tasks.fork.ForkTask,
 ]
 TASKS_MAP = {task.name: task for task in TASKS}
 
@@ -91,7 +93,7 @@ def execute_configuration(conf, dry_run=False):
     tasks = []
     for feed_name, tasks_conf in feeds.items():
         logger.info("Validating feed %s" % feed_name)
-        tasks.append((feed_name, create_task("feed", tasks_conf)))
+        tasks.append((feed_name, create_task('execute', tasks_conf)))
 
     res = {}
     for (feed_name, task) in tasks:

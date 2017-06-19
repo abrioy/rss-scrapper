@@ -6,18 +6,14 @@ from rss_scrapper.tasks.task import Task
 logger = logging.getLogger(__name__)
 
 
-class FeedTask(Task):
-    name = "feed"
+class ExecuteTask(Task):
+    name = "execute"
 
     tasks = []
 
     def init(self, tasks=None):
         if tasks is not None:
             self.tasks = tasks
-
-        if len(tasks) == 0:
-            logger.warning("There is no tasks in this feed, nothing will"
-                           "be generated")
 
     def init_conf(self, conf):
         tasks = self.create_subtasks(conf)
