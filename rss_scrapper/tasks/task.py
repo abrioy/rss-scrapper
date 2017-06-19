@@ -66,9 +66,8 @@ class Task:
 
         res = self.do_execute(data)
         if res is None:
-            yield from []
-        else:
-            return res
+            return []
+        return res
 
     def do_execute(self, data):
         """
