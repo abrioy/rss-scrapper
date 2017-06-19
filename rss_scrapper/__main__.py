@@ -2,6 +2,7 @@
 
 import argparse
 import logging
+import logging.config
 import time
 
 from rss_scrapper.configuration import load_yaml_from_path
@@ -22,27 +23,19 @@ def main():
         help='logging level (default=5):'
              '\n0=off, 1=critical, 2=errors, 3=warnings, 4=info, 5=debug'
     )
+
     parser.add_argument(
-        '--log-output', action='store', required=False,
-        dest='logOutput', default=None,
-        help='output log file'
+        'configuration', action='store',
+        metavar="input.yaml", type=str,
+        help='the configuration file'
     )
 
     args = parser.parse_args()
 
     # Configuring logging
-    logger = logging.getLogger("rss_scrapper")
-    if args.logOutput:
-        handler = logging.FileHandler(args.logOutput)
-    else:
-        handler = logging.StreamHandler()
+    logging.config.fileConfig('rss_scrapper/logging.ini')
+    logger = logging.getLogger('rss_scrapper')
 
-    formatter = logging.Formatter(
-        '%(name)s |%(asctime)s| %(levelname)-7s %(module)s:%(lineno)-3d -'
-        ' %(message)s')
-    handler.setFormatter(formatter)
-
-    logger.addHandler(handler)
     log_levels = {
         '0': logging.NOTSET,
         '1': logging.CRITICAL,
@@ -57,15 +50,15 @@ def main():
         logger.setLevel(logging.NOTSET)
         logger.warning("Invalid logging level:", args.log_level)
 
-    start = time.time()
-    logger.debug("Starting...")
+    if args.configuration:
+        start = time.time()
+        logger.debug("Starting...")
 
-    conf = load_yaml_from_path("input.yaml")
-    res = execute_configuration(conf)
-    print(res)
+        conf = load_yaml_from_path(args.configuration)
+        res = execute_configuration(conf)
+        print(res)
 
-    logger.debug("Done in %.02fs." % (time.time() - start))
-
+        logger.debug("Done in %.02fs." % (time.time() - start))
 
 if __name__ == "__main__":
     main()
