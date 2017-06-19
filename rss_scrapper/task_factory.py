@@ -4,6 +4,8 @@ import logging
 from rss_scrapper.configuration import validate_task_name
 from rss_scrapper.errors import ConfigurationError
 import rss_scrapper.tasks.dummy
+import rss_scrapper.tasks.print
+import rss_scrapper.tasks.dump
 import rss_scrapper.tasks.feed
 import rss_scrapper.tasks.text
 import rss_scrapper.tasks.get
@@ -17,6 +19,8 @@ import rss_scrapper.tasks.concat
 logger = logging.getLogger(__name__)
 TASKS = [
     rss_scrapper.tasks.dummy.DummyTask,
+    rss_scrapper.tasks.print.PrintTask,
+    rss_scrapper.tasks.dump.DumpTask,
     rss_scrapper.tasks.feed.FeedTask,
     rss_scrapper.tasks.text.TextTask,
     rss_scrapper.tasks.get.GetTask,
@@ -47,20 +51,24 @@ def create_tasks(tasks_conf, parent_task=None):
         raise ConfigurationError("no task list found", conf=tasks_conf)
 
     for task_conf in tasks_conf:
-        if not isinstance(task_conf, dict):
-            logger.error("Expected a task and got a %s" % type(task_conf))
+        if isinstance(task_conf, str):
+            tasks.append(create_task(task_conf, parent_task=parent_task))
+
+        elif isinstance(task_conf, dict):
+            for task_name, task_args in task_conf.items():
+                validate_task_name(task_name)
+
+                try:
+                    tasks.append(create_task(task_name, task_args,
+                                             parent_task=parent_task))
+                except ConfigurationError as e:
+                    e.conf = task_conf
+                    raise e
+        else:
+            logger.error("Expected a task and got a %s at %s" %
+                         (type(task_conf), task_conf))
             raise ConfigurationError("incorrect task definition",
                                      conf=task_conf)
-
-        for task_name, task_args in task_conf.items():
-            validate_task_name(task_name)
-
-            try:
-                tasks.append(create_task(task_name, task_args,
-                                         parent_task=parent_task))
-            except ConfigurationError as e:
-                e.conf = task_conf
-                raise e
 
     return tasks
 
