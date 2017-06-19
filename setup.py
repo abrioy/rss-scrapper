@@ -36,7 +36,7 @@ setup(
                  'rss_scrapper'},
     entry_points={
         'console_scripts': [
-            'rss_scrapper=rss_scrapper:main'
+            'rss_scrapper=rss_scrapper.__main__:main'
         ]
     },
     include_package_data=True,
