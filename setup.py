@@ -16,6 +16,7 @@ requirements = [
     'cssselect>=1.0.1',
     'feedgen>=0.5.1',
     'parsedatetime>=2.4',
+    'pytz>=2017.2',
 ]
 
 test_requirements = [
