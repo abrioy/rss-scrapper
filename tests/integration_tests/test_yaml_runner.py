@@ -4,7 +4,7 @@ import os
 
 import pytest
 
-from rss_scrapper.configuration import load_yaml_from_path
+from rss_scrapper.configuration import get_from_path
 from rss_scrapper.task_factory import execute_configuration
 
 TEST_FILES_FOLDER = "tests/integration_tests/yaml_test_files"
@@ -24,7 +24,7 @@ def yaml_file(request):
 
 
 def test_configuration(yaml_file):
-    conf = load_yaml_from_path(yaml_file)
+    conf = get_from_path(yaml_file)
 
     assert TEST_EXPECTS_KEY in conf, \
         "yaml file should contains expected test results"

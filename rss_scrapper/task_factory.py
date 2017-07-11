@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from rss_scrapper.configuration import validate_task_name
-from rss_scrapper.errors import ConfigurationError
-import rss_scrapper.tasks.execute
+import rss_scrapper.tasks.concat
 import rss_scrapper.tasks.dummy
-import rss_scrapper.tasks.print
 import rss_scrapper.tasks.dump
-import rss_scrapper.tasks.text
+import rss_scrapper.tasks.execute
+import rss_scrapper.tasks.fork
 import rss_scrapper.tasks.get
-import rss_scrapper.tasks.xpath
-import rss_scrapper.tasks.selector
+import rss_scrapper.tasks.print
 import rss_scrapper.tasks.regex
 import rss_scrapper.tasks.rss_gen
+import rss_scrapper.tasks.selector
+import rss_scrapper.tasks.text
 import rss_scrapper.tasks.write
-import rss_scrapper.tasks.concat
-import rss_scrapper.tasks.fork
+import rss_scrapper.tasks.xpath
+from rss_scrapper.errors import ConfigurationError
 
 logger = logging.getLogger(__name__)
 TASKS = [
@@ -110,3 +109,15 @@ def execute_configuration(conf, dry_run=False):
 
             res[feed_name] = task_res_data
     return res
+
+
+def validate_task_name(task_name):
+    if not isinstance(task_name, str):
+        logger.error("Expected a task name and got a %s"
+                     % type(task_name))
+        if isinstance(task_name, dict):
+            logger.error("Is there an indentation problem ? "
+                         "The task's arguments should have one more "
+                         "indentation level than its name")
+        raise ConfigurationError("task name should be a string",
+                                 conf=task_name)
