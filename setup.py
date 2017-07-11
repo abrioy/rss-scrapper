@@ -15,6 +15,7 @@ requirements = [
     'lxml>=3.7.3',
     'cssselect>=1.0.1',
     'feedgen>=0.5.1',
+    'parsedatetime>=2.4',
 ]
 
 test_requirements = [

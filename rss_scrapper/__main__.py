@@ -58,7 +58,7 @@ def main():
 
         conf = get_from_path(args.configuration)
         result = execute_configuration(conf)
-        sys.stdout.write(result)
+        sys.stdout.write(str(result))
 
         logger.debug("Done in %.02fs." % (time.time() - start))
 

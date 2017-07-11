@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
+
+import parsedatetime as parsedatetime
+import pytz
 from feedgen.feed import FeedGenerator
 
 from rss_scrapper.configuration_utils import get_parameter
@@ -90,6 +93,11 @@ class RssGenTask(Task):
                 # FIXME: Quick fix because the link attribute expects a dict
                 if attribute == "link":
                     res_data[0] = {'href': res_data[0]}
+                elif attribute == "pubdate":
+                    calendar = parsedatetime.Calendar()
+                    res_data[0], _ = calendar.parseDT(
+                        datetimeString=res_data[0],
+                        tzinfo=pytz.utc)
 
                 # Calling the setter
                 setter = getattr(info, attribute)
